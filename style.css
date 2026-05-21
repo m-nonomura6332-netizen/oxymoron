@@ -36,9 +36,25 @@ body {
 #input-view {
     transition: opacity 0.8s ease-in-out;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     padding: 20px;
     text-align: center;
+}
+
+.main-title {
+    font-family: var(--serif-font);
+    font-weight: 400;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+}
+
+.description {
+    font-family: var(--serif-font);
+    font-size: 0.7rem;
+    color: var(--sub-color);
+    margin-bottom: 2rem;
+    line-height: 1.8;
 }
 
 input[type="text"] {
@@ -53,6 +69,28 @@ input[type="text"] {
     outline: none;
     padding-bottom: 5px;
     color: var(--text-color);
+}
+
+/* Loading View */
+#loading-view {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.loading-text {
+    font-family: var(--serif-font);
+    font-size: 1.2rem;
+    color: var(--text-color);
+    animation: breathing 3s ease-in-out infinite;
+}
+
+@keyframes breathing {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 1; }
 }
 
 #display-view {
@@ -73,16 +111,18 @@ input[type="text"] {
     align-items: baseline;
     gap: 0;
     transition: opacity 1s ease;
+    z-index: 10;
 }
 
-.prefix {
+/* Dynamic Font Classes */
+.font-serif {
     font-family: var(--serif-font);
     font-weight: 200;
     font-size: 4rem;
     white-space: nowrap;
 }
 
-.oxymoron-word {
+.font-sans {
     font-family: var(--sans-font);
     font-weight: 900;
     font-size: 8rem;
@@ -91,20 +131,28 @@ input[type="text"] {
     white-space: nowrap;
 }
 
+#orbit-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
 .marginalia {
     position: absolute;
     font-family: var(--serif-font);
-    font-size: 9px;
+    font-size: 1.1rem;
     color: var(--sub-color);
-    opacity: 0.6;
-    max-width: 150px;
-    line-height: 1.4;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 1.5s ease;
 }
 
-.top-left { top: 40px; left: 40px; }
-.top-right { top: 40px; right: 40px; text-align: right; }
-.bottom-left { bottom: 40px; left: 40px; }
-.bottom-right { bottom: 40px; right: 40px; text-align: right; }
+.marginalia.show {
+    opacity: 0.6;
+}
 
 #config-trigger {
     position: fixed;
@@ -144,7 +192,8 @@ input[type="text"] {
 }
 
 @media (max-width: 600px) {
-    .prefix { font-size: 2rem; }
-    .oxymoron-word { font-size: 4rem; }
-    .marginalia { font-size: 8px; max-width: 80px; }
+    .font-serif { font-size: 2rem; }
+    .font-sans { font-size: 4rem; }
+    .marginalia { font-size: 0.7rem; }
+    .main-title { font-size: 1.8rem; }
 }

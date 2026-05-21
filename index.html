@@ -9,17 +9,24 @@
 <body>
 
     <div id="input-view">
+        <h1 class="main-title">オクシモロンの部屋</h1>
+        <div class="description">
+            <p>相反する言葉をぶつけ合い、まだ名前のない感情の輪郭を削り出す実験室。</p>
+            <p>今の気分や、気になる言葉を一つ入力してください。</p>
+        </div>
         <input type="text" id="word-input" placeholder="..." autocomplete="off">
+    </div>
+
+    <div id="loading-view">
+        <p class="loading-text">矛盾を探しています...</p>
     </div>
 
     <div id="display-view">
         <div id="main-output" class="ink-effect">
-            <span class="prefix" id="output-prefix"></span>
-            <span class="oxymoron-word" id="output-word"></span>
+            <span id="output-left"></span>
+            <span id="output-right"></span>
         </div>
-        <div class="marginalia top-left ink-effect" id="marg-1"></div>
-        <div class="marginalia top-right ink-effect" id="marg-2"></div>
-        <div class="marginalia bottom-left ink-effect" id="marg-3"></div>
+        <div id="orbit-container"></div>
     </div>
 
     <div id="config-trigger" onclick="toggleConfig(event)"></div>

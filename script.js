@@ -1,18 +1,10 @@
-const oxymoronDatabase = {
-    "小さい": ["巨人", "宇宙", "大罪", "歴史"],
-    "静かな": ["絶叫", "爆発", "喧騒", "銃声"],
-    "明るい": ["闇", "絶望", "孤独", "監獄"],
-    "優しい": ["殺意", "拷問", "拒絶", "兵器"]
-};
-
 const inputView = document.getElementById('input-view');
+const loadingView = document.getElementById('loading-view');
 const displayView = document.getElementById('display-view');
 const wordInput = document.getElementById('word-input');
-const outputPrefix = document.getElementById('output-prefix');
-const outputWord = document.getElementById('output-word');
-const marg1 = document.getElementById('marg-1');
-const marg2 = document.getElementById('marg-2');
-const marg3 = document.getElementById('marg-3');
+const outputLeft = document.getElementById('output-left');
+const outputRight = document.getElementById('output-right');
+const orbitContainer = document.getElementById('orbit-container');
 const apiKeyInput = document.getElementById('api-key');
 const apiConfig = document.getElementById('api-config');
 
@@ -33,17 +25,21 @@ wordInput.addEventListener('keypress', async (e) => {
         const input = wordInput.value.trim();
         if (!input) return;
 
-        let results = oxymoronDatabase[input];
+        // Transition to loading
+        inputView.style.opacity = '0';
+        setTimeout(() => {
+            inputView.style.display = 'none';
+            loadingView.style.display = 'block';
+        }, 800);
 
-        if (!results) {
-            inputView.style.opacity = '0.5';
-            inputView.style.pointerEvents = 'none';
-            results = await fetchGeminiOxymoron(input);
-        }
+        const data = await fetchGeminiOxymoron(input);
 
-        if (results && results.length >= 4) {
-            showOxymoron(input, results);
+        if (data && data.words && data.words.length >= 4) {
+            showOxymoron(input, data);
         } else {
+            // Revert on error
+            loadingView.style.display = 'none';
+            inputView.style.display = 'block';
             inputView.style.opacity = '1';
             inputView.style.pointerEvents = 'auto';
             alert("矛盾が見つかりませんでした。");
@@ -58,7 +54,13 @@ async function fetchGeminiOxymoron(inputWord) {
         return null;
     }
 
-    const prompt = `ユーザーが入力した単語【${inputWord}】に対して、意味が対極にあり、かつ組み合わせた時に構造的完成度が高いオクシモロン（矛盾語法）を作るための【対極の単語のみ（名詞など）】を4つ、純粋なJSON配列形式（例：["苦痛", "絶望", "地獄", "悲劇"]）だけで返却してください。絶対に『${inputWord}』という入力語自体を含めた完成形を返さないでください。余計な解説文やマークダウンの装飾も一切不要です`;
+    const prompt = `ユーザーが入力した単語【${inputWord}】に対して、構造的完成度が高いオクシモロン（矛盾語法）を生成してください。
+以下の厳格なJSONフォーマットで返却してください。
+{
+"position": "before", // 入力語が名詞の場合、対極の『形容詞』を生成し、"before"を指定。入力語が形容詞等の場合、対極の『名詞』を生成し、"after"を指定。
+"words": ["第1候補", "第2候補", "第3候補", "第4候補"]
+}
+※配列には必ず対極の単語のみを含め、入力語自体は絶対に含めないこと。マークダウンや解説は一切不要です。`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
@@ -79,25 +81,59 @@ async function fetchGeminiOxymoron(inputWord) {
         return JSON.parse(text);
     } catch (err) {
         console.error(err);
-        alert("APIリクエスト中にエラーが発生しました: " + err.message);
         return null;
     }
 }
 
-function showOxymoron(prefix, words) {
-    outputPrefix.textContent = prefix;
-    outputWord.textContent = words[0];
+function showOxymoron(inputWord, data) {
+    const { position, words } = data;
     
-    marg1.textContent = prefix + words[1];
-    marg2.textContent = prefix + words[2];
-    marg3.textContent = prefix + words[3];
+    // Clear previous orbit
+    orbitContainer.innerHTML = '';
 
-    inputView.style.opacity = '0';
-    setTimeout(() => {
-        inputView.style.display = 'none';
-        displayView.style.display = 'flex';
-        displayView.classList.add('fade-in');
-    }, 800);
+    if (position === 'before') {
+        // [Generated(Gothic)] + [Input(Mincho)]
+        outputLeft.textContent = words[0];
+        outputLeft.className = 'font-sans';
+        outputRight.textContent = inputWord;
+        outputRight.className = 'font-serif';
+    } else {
+        // [Input(Mincho)] + [Generated(Gothic)]
+        outputLeft.textContent = inputWord;
+        outputLeft.className = 'font-serif';
+        outputRight.textContent = words[0];
+        outputRight.className = 'font-sans';
+    }
+
+    // Create orbiting candidates (2nd to 4th)
+    words.slice(1).forEach((word, index) => {
+        const marg = document.createElement('div');
+        marg.className = 'marginalia';
+        marg.textContent = position === 'before' ? word + inputWord : inputWord + word;
+        
+        // Random orbit positioning with better distribution
+        // Distribute 3 words roughly 120 degrees apart to avoid overlap
+        const baseAngle = (index * (Math.PI * 2 / 3));
+        const angle = baseAngle + (Math.random() * 0.5 - 0.25); 
+        const distance = 250 + Math.random() * 100; // Increased distance for larger text
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        
+        marg.style.left = `calc(50% + ${x}px)`;
+        marg.style.top = `calc(50% + ${y}px)`;
+        marg.style.transform = 'translate(-50%, -50%)';
+        
+        orbitContainer.appendChild(marg);
+        
+        // Staggered fade in
+        setTimeout(() => {
+            marg.classList.add('show');
+        }, 1200 + (index * 400));
+    });
+
+    loadingView.style.display = 'none';
+    displayView.style.display = 'flex';
+    displayView.classList.add('fade-in');
 }
 
 document.body.addEventListener('click', () => {
@@ -117,6 +153,7 @@ function reset() {
         inputView.style.pointerEvents = 'auto';
         wordInput.value = '';
         wordInput.focus();
+        orbitContainer.innerHTML = '';
     }, 800);
 }
 
