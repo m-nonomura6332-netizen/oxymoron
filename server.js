@@ -28,7 +28,7 @@ app.post('/api/generate', async (req, res) => {
 ※配列には必ず対極の単語のみを含め、入力語自体は絶対に含めないこと。マークダウンや解説は一切不要です。`;
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
