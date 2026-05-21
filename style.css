@@ -1,0 +1,150 @@
+:root {
+    --bg-color: #F6F4F0;
+    --text-color: #333;
+    --sub-color: #999;
+    --serif-font: "Yu Mincho", "MS Mincho", serif;
+    --sans-font: "Inter", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Ink bleed / Letterpress effect */
+.ink-effect {
+    text-shadow: 
+        0.5px 0.5px 0px rgba(0,0,0,0.1),
+        -0.5px -0.5px 0px rgba(255,255,255,0.5);
+    filter: contrast(120%) brightness(95%);
+    mix-blend-mode: multiply;
+}
+
+#input-view {
+    transition: opacity 0.8s ease-in-out;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--text-color);
+    font-family: var(--serif-font);
+    font-weight: 200;
+    font-size: 1.5rem;
+    text-align: center;
+    outline: none;
+    padding-bottom: 5px;
+    color: var(--text-color);
+}
+
+#display-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+#main-output {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+    transition: opacity 1s ease;
+}
+
+.prefix {
+    font-family: var(--serif-font);
+    font-weight: 200;
+    font-size: 4rem;
+    white-space: nowrap;
+}
+
+.oxymoron-word {
+    font-family: var(--sans-font);
+    font-weight: 900;
+    font-size: 8rem;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+}
+
+.marginalia {
+    position: absolute;
+    font-family: var(--serif-font);
+    font-size: 9px;
+    color: var(--sub-color);
+    opacity: 0.6;
+    max-width: 150px;
+    line-height: 1.4;
+}
+
+.top-left { top: 40px; left: 40px; }
+.top-right { top: 40px; right: 40px; text-align: right; }
+.bottom-left { bottom: 40px; left: 40px; }
+.bottom-right { bottom: 40px; right: 40px; text-align: right; }
+
+#config-trigger {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 5px;
+    height: 5px;
+    background: #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+}
+
+#api-config {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    display: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    z-index: 101;
+}
+
+#api-config input {
+    font-size: 12px;
+    padding: 5px;
+    width: 200px;
+}
+
+.fade-in { animation: fadeIn 1.2s forwards; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .prefix { font-size: 2rem; }
+    .oxymoron-word { font-size: 4rem; }
+    .marginalia { font-size: 8px; max-width: 80px; }
+}

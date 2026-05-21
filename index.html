@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oxymoron Zine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="input-view">
+        <input type="text" id="word-input" placeholder="..." autocomplete="off">
+    </div>
+
+    <div id="display-view">
+        <div id="main-output" class="ink-effect">
+            <span class="prefix" id="output-prefix"></span>
+            <span class="oxymoron-word" id="output-word"></span>
+        </div>
+        <div class="marginalia top-left ink-effect" id="marg-1"></div>
+        <div class="marginalia top-right ink-effect" id="marg-2"></div>
+        <div class="marginalia bottom-left ink-effect" id="marg-3"></div>
+    </div>
+
+    <div id="config-trigger" onclick="toggleConfig(event)"></div>
+    <div id="api-config" onclick="event.stopPropagation()">
+        <p style="font-size: 10px; margin-bottom: 5px;">Gemini API Key</p>
+        <input type="password" id="api-key" placeholder="Paste key here">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
