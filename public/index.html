@@ -18,7 +18,7 @@
     </div>
 
     <div id="loading-view">
-        <p class="loading-text">矛盾を探しています...</p>
+        <p class="loading-text" id="loading-message">矛盾を探しています...</p>
     </div>
 
     <div id="display-view">
@@ -27,12 +27,6 @@
             <span id="output-right"></span>
         </div>
         <div id="orbit-container"></div>
-    </div>
-
-    <div id="config-trigger" onclick="toggleConfig(event)"></div>
-    <div id="api-config" onclick="event.stopPropagation()">
-        <p style="font-size: 10px; margin-bottom: 5px;">Gemini API Key</p>
-        <input type="password" id="api-key" placeholder="Paste key here">
     </div>
 
     <script src="script.js"></script>
